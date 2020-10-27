@@ -17,16 +17,3 @@ if mounth > 2 && ( (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0) )
 end
 
 p number
-
-# number = (mounth / 2) * 31 + ((mounth - 1) / 2) * 30 + days
-# if mounth == 9 || mounth == 11
-#   number += 1
-# end
-
-# if mounth > 2
-#   if (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
-#     number -= 1
-#   else
-#     number -= 2
-#   end
-# end
