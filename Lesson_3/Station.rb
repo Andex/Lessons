@@ -11,21 +11,19 @@ class Station
 
   def initialize(name)
     @name = name
-    @trains = {}
+    @trains = []
   end
 
   def take_train(train)
-    self.trains[train.number] = {type: train.type, quantity_railway_car: train.quantity_railway_car}
+    self.trains << train
   end
 
   def send_train(train)
-    self.trains.delete(train.number) if @trains.include?(train.number)
+    self.trains.delete(train) if @trains.include?(train)
   end
 
-  def show_trains_on_station
-    passenger = trains.select{|train, info| info[:type] == "passenger"}
-    cargo = trains.select{|train, info| info[:type] == "cargo"}
-    print "Станция #{name}\nКоличество пассажирских поездов - #{passenger.count}\nКоличество грузовых поездов - #{cargo.count}"
+  def trains_by_type(type)
+    trains.each{|train| p train if train.type == type}
   end
 
 end

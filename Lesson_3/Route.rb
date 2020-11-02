@@ -13,15 +13,10 @@ class Route
   end
 
   def add_intermediate_station(station)
-    stations << station
-    stations[-1], stations[-2] = stations[-2], stations[-1]
+    stations.insert(-2, station)
   end
   
   def delete_intermediate_station(station)
     stations.delete(station)
-  end
-
-  def show_all_stations
-    stations.each{|station| p station.name}
   end
 end

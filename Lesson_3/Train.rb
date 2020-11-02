@@ -13,13 +13,15 @@
 
 class Train
   attr_accessor :current_speed
-  attr_reader :number, :type, :quantity_railway_car
+  attr_reader :number, :type, :quantity_railway_car, :current_station
 
   def initialize(number, type, quantity_railway_car)
     @number = number
     @type = type
     @quantity_railway_car = quantity_railway_car
     @current_speed = 0
+    @current_station = nil
+    @route = nil
   end
 
   def speed_up(speed)
@@ -30,11 +32,19 @@ class Train
     self.current_speed = 0
   end
 
-  def change_quantity_railway_cars(change)
-    if (change == 1) || (change == -1) && (current_speed == 0)
-      @quantity_railway_car += change
+  def add_railway_cars
+    if current_speed == 0
+      @quantity_railway_car += 1
     else
-      p "Error. Можно прицеплять/отцеплять только по одному вагону за операцию и, когда поезд не движется!"
+      p "Error. Можно прицеплять вагон только когда поезд не движется!"
+    end
+  end
+
+  def remove_railway_cars
+    if current_speed == 0 || @quantity_railway_car > 0
+      @quantity_railway_car -= 1
+    else
+      p "Error. Можно отцеплять вагон только когда поезд не движется и когда есть что отцеплять!"
     end
   end
 
@@ -44,19 +54,38 @@ class Train
     @current_station.take_train(self)
   end
 
-  def find_next_station(direction)
-    @route.stations[@route.stations.index(@current_station) + direction]
+  def move_forward
+    return "У поезда не установлен маршрут" unless is_route_set?
+    if @current_station != @route.stations.last
+      @current_station.send_train(self) if @current_station.trains.include?(self)
+      @current_station = @route.stations[@route.stations.index(@current_station) + 1]
+      @current_station.take_train(self)
+    else
+      p 'Поезд не может двигаться вперед т.к. стоит на конечной станции'
+    end
+  end
+  
+  def move_back
+    return "У поезда не установлен маршрут" unless is_route_set?
+    if @current_station != @route.stations.first
+      @current_station.send_train(self) if @current_station.trains.include?(self)
+      @current_station = @route.stations[@route.stations.index(@current_station) - 1]
+      @current_station.take_train(self)
+    else
+      p 'Поезд не может двигаться назад т.к. стоит на начальной станции'
+    end
   end
 
-  # forward = 1, back = -1
-  def move(direction)
-    @current_station.send_train(self) if @current_station.train_list.include?(self.number)
-    @current_station = find_next_station(direction)
-    @current_station.take_train(self)
+  def next_station
+    @route.stations[@route.stations.index(@current_station) + 1] if is_route_set?
   end
 
-  def nearest_stations
-    p "Предыдущая станция #{find_next_station(-1).name}\nТекущая станция #{@current_station.name}\nСледующая станция #{find_next_station(1).name}"
+  def previous_station
+    @route.stations[@route.stations.index(@current_station) - 1] if is_route_set?
+  end
+
+  def is_route_set?
+    @route != nil
   end
 
 end
