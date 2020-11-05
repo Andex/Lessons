@@ -20,8 +20,6 @@ class Train
     @type = type
     @quantity_railway_car = quantity_railway_car
     @current_speed = 0
-    @current_station = nil
-    @route = nil
   end
 
   def speed_up(speed)
