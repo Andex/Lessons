@@ -123,11 +123,13 @@ class Interface
     p "'+' добавить станцию в маршрут, '-' удалить"
     action = gets.chomp
     p "Выберете станцию и введите ее номер"
-    show_all_stations
-    index = gets.chomp.to_i - 1
     if action == "+"
+      show_all_stations
+      index = gets.chomp.to_i - 1
       @routes[number_route].add_intermediate_station(@stations[index])
     else
+      show_stations_on_route
+      index = gets.chomp.to_i - 1
       @routes[number_route].stations.delete(@stations[index])
     end
   end
