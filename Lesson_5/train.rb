@@ -1,9 +1,10 @@
 class Train
-  attr_accessor :current_speed, :wagons
+  attr_accessor :type, :current_speed, :wagons
   attr_reader :number, :current_station
 
-  def initialize(number)
+  def initialize(number, type)
     @number = number
+    @type = type
     @wagons = []
     @current_speed = 0
   end
@@ -48,8 +49,16 @@ class Train
     @route.stations[@route.stations.index(@current_station) - 1] if is_route_set?
   end
 
+  def add_wagon(wagon)
+    return if is_train_move? || wagon.is_coupled
+    if wagon.type == type
+      wagon.is_coupled = true
+      wagons << wagon
+    end
+  end
+
   def remove_wagons(wagon)
-    if current_speed == 0 || wagons.include?(wagon)
+    if !is_train_move? || wagons.include?(wagon)
       wagon.is_coupled = false
       wagons.delete(wagon)
     end
@@ -57,10 +66,13 @@ class Train
 
   private
   
-  # это вспомогательный  метод для разрешения перемещения поезда по маршруту, поэтому его можно убрать из интерфейса
+  # это вспомогательный метод для разрешения перемещения поезда по маршруту, поэтому его можно убрать из интерфейса
   # не в protected потому что незачем переопределять данный метод т.к. маршрут поезду либо назначен, либо нет
   def is_route_set?
     @route != nil
   end
 
+  def is_train_move?
+    current_speed != 0
+  end
 end

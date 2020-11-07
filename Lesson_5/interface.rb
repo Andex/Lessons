@@ -1,5 +1,4 @@
 class Interface
-
   def initialize
     @stations = []
     @trains = []
@@ -82,7 +81,7 @@ class Interface
   
   def show_all_trains
     @trains.each_with_index do |train, index|
-      p "#{index + 1}: #{train.class.to_s} №#{train.number}"
+      p "#{index + 1}: #{train.type.to_s} №#{train.number}"
     end
   end
   
@@ -97,7 +96,7 @@ class Interface
     passenger = gets.chomp
     p 'Введите номер поезда'
     train_number = gets.chomp
-    if passenger == 'да'
+    if passenger == '+'
       @trains << PassengerTrain.new(train_number)
     else
       @trains << CargoTrain.new(train_number)
@@ -143,7 +142,7 @@ class Interface
   
   def add_wagons
     train = select_train
-    if @trains[train].class == PassengerTrain
+    if @trains[train].type == :passenger
       res = @trains[train].add_wagon(PassengerWagon.new)
     else
       res = @trains[train].add_wagon(CargoWagon.new)
@@ -188,7 +187,7 @@ class Interface
     show_all_stations
     station = gets.chomp.to_i - 1
     @stations[station].trains.each do |train|
-      p "Поезд №#{train.number} #{train.class.to_s}, количество вагонов - #{train.wagons.size}"
+      p "Поезд №#{train.number} #{train.type.to_s}, количество вагонов - #{train.wagons.size}"
     end
   end
 end
