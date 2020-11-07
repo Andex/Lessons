@@ -1,7 +1,5 @@
-class CargoWagon
-  attr_accessor :is_coupled
-
+class CargoWagon < Wagon
   def initialize
-    @is_coupled = false
+    super(:cargo)
   end
 end
