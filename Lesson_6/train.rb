@@ -2,15 +2,18 @@ require_relative 'modules.rb'
 
 class Train
   include ManufacturerCompany
-  
+
   attr_accessor :type, :current_speed, :wagons
   attr_reader :number, :current_station
+
+  @@trains = {}
 
   def initialize(number, type)
     @number = number
     @type = type
     @wagons = []
     @current_speed = 0
+    @@trains[number] = self
   end
 
   def speed_up(speed)
@@ -68,10 +71,12 @@ class Train
     end
   end
 
+  def self.find(number)
+    @@trains[number]
+  end
+
   private
-  
-  # это вспомогательный метод для разрешения перемещения поезда по маршруту, поэтому его можно убрать из интерфейса
-  # не в protected потому что незачем переопределять данный метод т.к. маршрут поезду либо назначен, либо нет
+
   def is_route_set?
     @route != nil
   end
