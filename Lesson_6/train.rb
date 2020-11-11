@@ -2,6 +2,7 @@ require_relative 'modules.rb'
 
 class Train
   include ManufacturerCompany
+  include InstanceCounter
 
   attr_accessor :type, :current_speed, :wagons
   attr_reader :number, :current_station
@@ -14,6 +15,7 @@ class Train
     @wagons = []
     @current_speed = 0
     @@trains[number] = self
+    register_instance
   end
 
   def speed_up(speed)
