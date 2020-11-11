@@ -2,9 +2,12 @@ class Station
   attr_reader :name
   attr_accessor :trains
 
+  @@stations = []
+
   def initialize(name)
     @name = name
     @trains = []
+    @@stations << self
   end
 
   def take_train(train)
@@ -19,4 +22,7 @@ class Station
     trains.each{|train| p train if train.class.to_s == type}
   end
 
+  def self.all
+    @@stations.each{|station| p station}
+  end
 end
