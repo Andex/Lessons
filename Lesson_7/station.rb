@@ -13,6 +13,14 @@ class Station
     @trains = []
     @@stations << self
     register_instance
+    validate!
+  end
+
+  def valid?
+    validate!
+    true
+  rescue
+    false
   end
 
   def take_train(train)
@@ -29,5 +37,11 @@ class Station
 
   def self.all
     @@stations.each{|station| p station}
+  end
+
+  protected
+
+  def validate!
+    raise TypeError, "Invalid station name type" unless name.is_a?(String)
   end
 end

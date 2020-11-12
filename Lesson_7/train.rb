@@ -16,6 +16,14 @@ class Train
     @current_speed = 0
     @@trains[number] = self
     register_instance
+    validate!
+  end
+
+  def valid?
+    validate!
+    true
+  rescue
+    false
   end
 
   def speed_up(speed)
@@ -75,6 +83,13 @@ class Train
 
   def self.find(number)
     @@trains[number]
+  end
+
+  protected
+
+  def validate!
+    raise "Wrong type of train" unless type == :cargo || type == :passenger
+    raise "Wrong number of train" if (number =~ /^(\d{3}|\w{3})-*(\d{3}|\w{3})$/).nil?
   end
 
   private
