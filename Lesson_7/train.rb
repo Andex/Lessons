@@ -41,7 +41,7 @@ class Train
   end
 
   def move_forward
-    return "У поезда не установлен маршрут" unless is_route_set?
+    raise "У поезда не установлен маршрут" unless is_route_set?
     if @current_station != @route.stations.last
       @current_station.send_train(self) if @current_station.trains.include?(self)
       @current_station = @route.stations[@route.stations.index(@current_station) + 1]
@@ -50,7 +50,7 @@ class Train
   end
   
   def move_back
-    return "У поезда не установлен маршрут" unless is_route_set?
+    raise "У поезда не установлен маршрут" unless is_route_set?
     if @current_station != @route.stations.first
       @current_station.send_train(self) if @current_station.trains.include?(self)
       @current_station = @route.stations[@route.stations.index(@current_station) - 1]

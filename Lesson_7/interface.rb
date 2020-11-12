@@ -28,7 +28,6 @@ class Interface
         p 'Станция создана'
       when 2
         create_train
-        p 'Поезд создан'
       when 3
         create_route
         p 'Маршрут создан'
@@ -94,6 +93,7 @@ class Interface
   def create_train
     p 'Создать пассажирскийй поезд? +/-'
     passenger = gets.chomp
+    raise "You should have entered + or -" unless passenger == "+" || passenger == "-"
     p 'Введите номер поезда'
     train_number = gets.chomp
     if passenger == '+'
@@ -101,6 +101,10 @@ class Interface
     else
       @trains << CargoTrain.new(train_number)
     end
+    p 'Поезд создан'
+  rescue StandardError => e
+    p e.message
+    retry
   end
   
   def create_route
