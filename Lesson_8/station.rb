@@ -16,6 +16,14 @@ class Station
     register_instance
   end
 
+  def enum_trains(&block)
+    if block_given?
+      trains.each{|train| block.call(train)}
+    else
+      raise LocalJumpError, "no block"
+    end
+  end
+
   def valid?
     validate!
     true
