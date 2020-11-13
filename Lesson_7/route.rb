@@ -5,8 +5,8 @@ class Route
 
   def initialize(starting_station, end_station)
     @stations = [starting_station, end_station]
-    register_instance
     validate!
+    register_instance
   end
 
   def valid?

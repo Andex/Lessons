@@ -14,9 +14,9 @@ class Train
     @type = type
     @wagons = []
     @current_speed = 0
+    validate!
     @@trains[number] = self
     register_instance
-    validate!
   end
 
   def valid?
