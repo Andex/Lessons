@@ -27,6 +27,6 @@ class Route
   protected
 
   def validate!
-    raise TypeError, "Invalid station name type" unless stations.first.is_a?(String) && stations.last.is_a?(String)
+    raise TypeError, "Invalid station name type" unless stations.first.name..is_a?(String) && stations.last.name.is_a?(String)
   end
 end
