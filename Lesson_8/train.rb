@@ -26,6 +26,14 @@ class Train
     false
   end
 
+  def enum_wagons(&block)
+    if block_given?
+      wagons.each{|wagon| block.call(wagon)}
+    else
+      raise LocalJumpError, "no block"
+    end
+  end
+
   def speed_up(speed)
     self.current_speed = speed
   end
