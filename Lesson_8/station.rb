@@ -18,6 +18,7 @@ class Station
 
   def enum_trains(&block)
     if block_given?
+      return p "The station has no trains" if trains == []
       trains.each{|train| block.call(train)}
     else
       raise LocalJumpError, "no block"
