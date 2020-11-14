@@ -18,6 +18,7 @@ class Interface
       p '8 - чтобы перемещать поезд по маршруту'
       p '9 - чтобы посмотреть список станций в маршруте'
       p '10 - чтобы посмотреть список поездов на станции'
+      p '11 - чтобы посмотреть список вагонов у поезда'
       p '0 - чтобы закончить программу'
       input = gets.chomp.to_i
       break if input == 0
@@ -46,6 +47,8 @@ class Interface
         show_stations_on_route
       when 10
         show_trains_on_station
+      when 11
+        show_train_wagons
       end
       p 'Нажмите Enter для возврата к меню'
       gets.chomp
@@ -80,7 +83,7 @@ class Interface
   
   def show_all_trains
     @trains.each_with_index do |train, index|
-      p "#{index + 1}: #{train.type.to_s} №#{train.number}"
+      p "#{index + 1}: #{train.type.to_s} №#{train.number} кол-во вагонов #{train.wagons.size}"
     end
   end
   
@@ -90,6 +93,16 @@ class Interface
     @stations << Station.new(station_name)
   end
   
+  def create_wagon(type)
+    if type == :passenger
+      p 'Укажите количество пассажирских мест в вагоне'
+      PassengerWagon.new(gets.chomp.to_i)
+    else
+      p 'Укажите общий объем грузового вагона'
+      CargoWagon.new(gets.chomp.to_f)
+    end
+  end
+
   def create_train
     p 'Создать пассажирскийй поезд? +/-'
     passenger = gets.chomp
@@ -147,9 +160,9 @@ class Interface
   def add_wagons
     train = select_train
     if @trains[train].type == :passenger
-      res = @trains[train].add_wagon(PassengerWagon.new)
+      res = @trains[train].add_wagon(create_wagon(:passenger))
     else
-      res = @trains[train].add_wagon(CargoWagon.new)
+      res = @trains[train].add_wagon(create_wagon(:cargo))
     end
     p "Error. Вы пытаетесь прицепить вагон к движущемуся поезду, не соответвующего типа или уже прицепленного к другому поезду!" if res.nil?
   end
@@ -190,8 +203,19 @@ class Interface
     p 'Выберете станцию'
     show_all_stations
     station = gets.chomp.to_i - 1
-    @stations[station].trains.each do |train|
+    @stations[station].enum_trains do |train|
       p "Поезд №#{train.number} #{train.type.to_s}, количество вагонов - #{train.wagons.size}"
+    end
+  end
+
+  def show_train_wagons
+    train = select_train
+    @trains[train].enum_wagons do |wagon|
+      if @trains[train].type == :passenger
+        p "Вагон пассажирский с кол-вом мест #{wagon.number_of_seats}, свободно #{wagon.number_of_free_seats}"
+      else
+        p "Вагон грузовой общим объемом #{wagon.general_volume}, свободно #{wagon.remaining_volume}"
+      end
     end
   end
 end
