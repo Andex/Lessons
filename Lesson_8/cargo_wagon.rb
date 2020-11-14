@@ -9,7 +9,7 @@ class CargoWagon < Wagon
   end
 
   def take_volume(volume)
-    return nil if number_of_occupied_volume >= general_volume || volume > remaining_volume
+    raise "Invalid value for adding volume" if number_of_occupied_volume >= general_volume || volume > remaining_volume
     self.number_of_occupied_volume += volume
   end
 
