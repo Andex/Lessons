@@ -28,7 +28,6 @@ class Train
 
   def enum_wagons(&block)
     if block_given?
-      p wagons == []
       return p "The train has no wagons" if wagons == []
       wagons.each{|wagon| block.call(wagon)}
     else

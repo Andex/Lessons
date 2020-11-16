@@ -9,7 +9,7 @@ class PassengerWagon < Wagon
   end
 
   def take_the_seats
-    return "All seats are already taken" if number_of_occupied_seats >= number_of_seats
+    raise "All seats are already taken" if number_of_occupied_seats >= number_of_seats
     self.number_of_occupied_seats += 1
   end
 
