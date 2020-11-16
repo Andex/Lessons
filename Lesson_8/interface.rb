@@ -15,10 +15,11 @@ class Interface
       p '5 - чтобы назначить маршрут поезду'
       p '6 - чтобы добавить вагоны к поезду'
       p '7 - чтобы отцепить вагоны от поезда'
-      p '8 - чтобы перемещать поезд по маршруту'
-      p '9 - чтобы посмотреть список станций в маршруте'
-      p '10 - чтобы посмотреть список поездов на станции'
-      p '11 - чтобы посмотреть список вагонов у поезда'
+      p '8 - чтобы занять место или объем в вагоне'
+      p '9 - чтобы перемещать поезд по маршруту'
+      p '10 - чтобы посмотреть список станций в маршруте'
+      p '11 - чтобы посмотреть список поездов на станции'
+      p '12 - чтобы посмотреть список вагонов у поезда'
       p '0 - чтобы закончить программу'
       input = gets.chomp.to_i
       break if input == 0
@@ -42,13 +43,15 @@ class Interface
       when 7
         delete_wagons
       when 8
-        move_train
+        take_smth_in_wagon
       when 9
-        show_stations_on_route
+        move_train
       when 10
-        show_trains_on_station
+        show_stations_on_route
       when 11
-        show_train_wagons
+        show_trains_on_station
+      when 12
+        show_train_wagons(select_train)
       end
       p 'Нажмите Enter для возврата к меню'
       gets.chomp
@@ -164,7 +167,11 @@ class Interface
     else
       res = @trains[train].add_wagon(create_wagon(:cargo))
     end
-    p "Error. Вы пытаетесь прицепить вагон к движущемуся поезду, не соответвующего типа или уже прицепленного к другому поезду!" if res.nil?
+    if res.nil?
+      p "Error. Вы пытаетесь прицепить вагон к движущемуся поезду, не соответвующего типа или уже прицепленного к другому поезду!"
+    else
+      @wagons << @trains[train].wagons.last
+    end
   end
   
   def delete_wagons
@@ -175,6 +182,22 @@ class Interface
       p 'Вагон отцеплен'
     else
       p 'Error. У поезда нет вагонов!'
+    end
+  end
+
+  def take_smth_in_wagon
+    train = select_train
+    p "Выберете вагон"
+    show_train_wagons(train)
+    number_wagon = gets.chomp.to_i - 1
+    if @trains[train].type == :passenger
+      @trains[train].wagons[number_wagon].take_the_seats
+      p "Место успешно занято"
+    else
+      p "Сколько объема хотите занять?"
+      volume = gets.chomp.to_f
+      @trains[train].wagons[number_wagon].take_volume(volume)
+      p "Указанный объем успешно занят"
     end
   end
   
@@ -195,7 +218,6 @@ class Interface
   
   def show_stations_on_route
     number_route = select_route
-    number_route
     show_all_stations(@routes[number_route].stations)
   end
   
@@ -208,14 +230,15 @@ class Interface
     end
   end
 
-  def show_train_wagons
-    train = select_train
+  def show_train_wagons(train)
+    index = 1
     @trains[train].enum_wagons do |wagon|
       if @trains[train].type == :passenger
-        p "Вагон пассажирский с кол-вом мест #{wagon.number_of_seats}, свободно #{wagon.number_of_free_seats}"
+        p "#{index}: Вагон пассажирский с кол-вом мест #{wagon.number_of_seats}, свободно #{wagon.number_of_free_seats}"
       else
-        p "Вагон грузовой общим объемом #{wagon.general_volume}, свободно #{wagon.remaining_volume}"
+        p "#{index}: Вагон грузовой общим объемом #{wagon.general_volume}, свободно #{wagon.remaining_volume}"
       end
+      index += 1
     end
   end
 end
