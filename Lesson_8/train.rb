@@ -9,6 +9,8 @@ class Train
   attr_accessor :type, :current_speed, :wagons
   attr_reader :number, :current_station
 
+  TRAIN_NUMBER_FORMAT = /^(\d{3}|\w{3})-*(\d{3}|\w{3})$/.freeze
+
   def initialize(number, type)
     @number = number
     @type = type
@@ -98,7 +100,7 @@ class Train
 
   def validate!
     raise 'Wrong type of train' unless type == :cargo || type == :passenger
-    raise 'Wrong number of train' if (number =~ /^(\d{3}|\w{3})-*(\d{3}|\w{3})$/).nil?
+    raise 'Wrong number of train' if (number =~ TRAIN_NUMBER_FORMAT).nil?
   end
 
   private
