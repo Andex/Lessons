@@ -50,7 +50,7 @@ class Train
   def move_forward
     raise 'У поезда не установлен маршрут' unless route_set?
 
-    return unless @current_station == @route.stations.last
+    return unless @current_station != @route.stations.last
 
     @current_station.send_train(self) if @current_station.trains.include?(self)
     @current_station = @route.stations[@route.stations.index(@current_station) + 1]
@@ -60,7 +60,7 @@ class Train
   def move_back
     raise 'У поезда не установлен маршрут' unless route_set?
 
-    return unless @current_station == @route.stations.first
+    return unless @current_station != @route.stations.first
 
     @current_station.send_train(self) if @current_station.trains.include?(self)
     @current_station = @route.stations[@route.stations.index(@current_station) - 1]
@@ -77,8 +77,7 @@ class Train
 
   def add_wagon(wagon)
     return if train_move? || wagon.is_coupled
-
-    return unless wagon.type != type
+    return unless wagon.type == type
 
     wagon.is_coupled = true
     wagons << wagon
@@ -86,7 +85,7 @@ class Train
 
   def remove_wagons(wagon)
     return unless !train_move? || wagons.include?(wagon)
-    
+
     wagon.is_coupled = false
     wagons.delete(wagon)
   end

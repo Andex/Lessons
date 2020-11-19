@@ -14,19 +14,17 @@ class Interface
   def start
     loop do
       p 'Введите:'
-      @menu.each_with_index{ |m, i| p "#{i} - #{m}" }
+      @menu.each_with_index { |m, i| p "#{i} - #{m}" }
       input = gets.chomp.to_i
       break if input.zero?
 
       case input
       when 1
         create_station
-        p 'Станция создана'
       when 2
         create_train
       when 3
         create_route
-        p 'Маршрут создан'
       when 4
         route_control
       when 5
@@ -87,6 +85,7 @@ class Interface
     p 'Введите название станции'
     station_name = gets.chomp
     @stations << Station.new(station_name)
+    p 'Станция создана'
   end
 
   def create_wagon(type)
@@ -129,6 +128,7 @@ class Interface
     p 'Составленный маршрут:'
     route.stations.each { |station| p station.name }
     @routes << route
+    p 'Маршрут создан'
   end
 
   def route_control
@@ -164,7 +164,6 @@ class Interface
     if res.nil?
       p 'Error. Вы пытаетесь прицепить вагон к движущемуся поезду, не соответвующего типа или уже прицепленного к другому поезду!'
     else
-      @wagons << @trains[train].wagons.last
       p 'Соответсвующий вагон прицеплен'
     end
   end
@@ -206,16 +205,14 @@ class Interface
     p "Отправляем поезд со станции #{@trains[train].current_station.name}" unless @trains[train].current_station.nil?
     if action == '+'
       res = @trains[train].move_forward
-      return 'Поезд не может двигаться вперед т.к. стоит на конечной станции' if res.nil?
+      return p 'Поезд не может двигаться вперед т.к. стоит на конечной станции' if res.nil?
     else
       res = @trains[train].move_back
-      return 'Поезд не может двигаться назад т.к. стоит на начальной станции' if res.nil?
+      return p 'Поезд не может двигаться назад т.к. стоит на начальной станции' if res.nil?
     end
-    begin
-      p "на станцию #{@trains[train].current_station.name}"
-    rescue StandardError
-      p res
-    end
+    p "на станцию #{@trains[train].current_station.name}"
+  rescue StandardError
+    p res
   end
 
   def show_stations_on_route
