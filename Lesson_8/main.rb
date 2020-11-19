@@ -1,14 +1,14 @@
-require_relative 'modules.rb'
-require_relative 'station.rb'
-require_relative 'route.rb'
-require_relative 'train.rb'
-require_relative 'wagon.rb'
-require_relative 'cargo_train.rb'
-require_relative 'passenger_train.rb'
-require_relative 'cargo_wagon.rb'
-require_relative 'passenger_wagon.rb'
-require_relative 'interface.rb'
+require_relative 'modules'
+require_relative 'station'
+require_relative 'route'
+require_relative 'train'
+require_relative 'wagon'
+require_relative 'cargo_train'
+require_relative 'passenger_train'
+require_relative 'cargo_wagon'
+require_relative 'passenger_wagon'
+require_relative 'interface'
 
 interface = Interface.new
-  
+
 interface.start

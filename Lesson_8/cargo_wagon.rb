@@ -9,7 +9,7 @@ class CargoWagon < Wagon
   end
 
   def take_volume(volume)
-    return p "Invalid value for adding volume" if number_of_occupied_volume >= general_volume || volume > remaining_volume
+    return p 'Invalid value for adding volume' if number_of_occupied_volume >= general_volume || volume > remaining_volume
     self.number_of_occupied_volume += volume
   end
 
@@ -21,6 +21,8 @@ class CargoWagon < Wagon
 
   def validate!
     super()
-    raise "Invalid value general volume" unless general_volume > 0 && (general_volume.is_a?(Integer) || general_volume.is_a?(Float))
+    unless general_volume.positive? && (general_volume.is_a?(Integer) || general_volume.is_a?(Float))
+      raise 'Invalid value general volume'
+    end
   end
 end

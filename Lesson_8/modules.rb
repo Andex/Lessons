@@ -7,7 +7,7 @@ module InstanceCounter
     base.extend(ClassMethods)
     base.include(InstanceMethods)
   end
-  
+
   module ClassMethods
     attr_writer :instances
 
@@ -18,6 +18,7 @@ module InstanceCounter
 
   module InstanceMethods
     private
+
     def register_instance
       self.class.instances += 1
     end

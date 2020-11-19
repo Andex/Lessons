@@ -1,11 +1,11 @@
-require_relative 'modules.rb'
+require_relative 'modules'
 
 class Wagon
   include ManufacturerCompany
-  
+
   attr_reader :type
   attr_accessor :is_coupled
-  
+
   def initialize(type)
     @type = type
     @is_coupled = false
@@ -15,13 +15,13 @@ class Wagon
   def valid?
     validate!
     true
-  rescue
+  rescue StandardError
     false
   end
 
   protected
 
   def validate!
-    raise "Wrong type of wagon" unless type == :cargo || type == :passenger
+    raise 'Wrong type of wagon' unless type == :cargo || type == :passenger
   end
 end
