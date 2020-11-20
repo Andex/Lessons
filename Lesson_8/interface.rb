@@ -172,9 +172,7 @@ class Interface
     train = select_train
     if @trains[train].wagons != []
       res = @trains[train].remove_wagons(@trains[train].wagons.last)
-      if res.nil?
-        return p 'Error. Можно отцеплять вагон только когда поезд не движется и когда данный вагон есть у поезда!'
-      end
+      return p 'Error. Можно отцеплять вагон только когда поезд не движется и когда данный вагон есть у поезда!' if res.nil?
 
       p 'Вагон отцеплен'
     else
