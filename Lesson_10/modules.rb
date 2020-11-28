@@ -95,6 +95,7 @@ module Validation
     end
 
     def validate_type(attr_name, args)
+      value = instance_variable_get("@#{attr_name}")
       raise ArgumentError, 'Class name not passed' if args[1].nil?
       raise TypeError, 'Variable type mismatch' unless value.instance_of?(args[1]) || value.instance_of?(args[-1])
     end
