@@ -2,6 +2,9 @@ class PassengerWagon < Wagon
   attr_reader :number_of_seats
   attr_accessor :number_of_occupied_seats
 
+  validate :number_of_seats, :presence
+  validate :number_of_seats, :type, Integer
+
   def initialize(number_of_seats)
     @number_of_seats = number_of_seats
     @number_of_occupied_seats = 0
@@ -18,10 +21,10 @@ class PassengerWagon < Wagon
     number_of_seats - number_of_occupied_seats
   end
 
-  protected
+  # protected
 
-  def validate!
-    super()
-    raise 'Invalid value number of seats' unless number_of_seats.positive? && number_of_seats.is_a?(Integer)
-  end
+  # def validate!
+  #   super()
+  #   raise 'Invalid value number of seats' unless number_of_seats.positive? && number_of_seats.is_a?(Integer)
+  # end
 end

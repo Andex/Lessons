@@ -2,16 +2,19 @@ require_relative 'modules'
 
 class Station
   include InstanceCounter
+  include Validation
 
   attr_reader :name
   attr_accessor :trains
+
+  validate :name, :presence
+  validate :name, :type, String
 
   @@stations = []
 
   def initialize(name)
     @name = name
     @trains = []
-    validate!
     @@stations << self
     register_instance
   end
@@ -21,13 +24,6 @@ class Station
     return p 'The station has no trains' if trains == []
 
     trains.each { |train| block.call(train) }
-  end
-
-  def valid?
-    validate!
-    true
-  rescue StandardError
-    false
   end
 
   def take_train(train)
@@ -44,11 +40,5 @@ class Station
 
   def self.all
     @@stations.each { |station| p station }
-  end
-
-  protected
-
-  def validate!
-    raise TypeError, 'Invalid station name type' unless name.is_a?(String)
   end
 end

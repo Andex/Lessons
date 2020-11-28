@@ -2,6 +2,9 @@ class CargoWagon < Wagon
   attr_reader :general_volume
   attr_accessor :number_of_occupied_volume
 
+  validate :general_volume, :presence
+  validate :general_volume, :type, Integer, Float
+
   def initialize(general_volume)
     @general_volume = general_volume
     @number_of_occupied_volume = 0
@@ -18,10 +21,10 @@ class CargoWagon < Wagon
     general_volume - number_of_occupied_volume
   end
 
-  private
+  # private
 
-  def validate!
-    super()
-    raise 'Invalid value general volume' unless general_volume.positive? && (general_volume.is_a?(Integer) || general_volume.is_a?(Float))
-  end
+  # def validate!
+  #   super()
+  #   raise 'Invalid value general volume' unless general_volume.positive? && (general_volume.is_a?(Integer) || general_volume.is_a?(Float))
+  # end
 end

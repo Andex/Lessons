@@ -3,29 +3,26 @@ require_relative 'modules'
 class Train
   include ManufacturerCompany
   include InstanceCounter
+  include Validation
 
   @@trains = {}
+
+  TRAIN_NUMBER_FORMAT = /^(\d{3}|\w{3})-*(\d{3}|\w{3})$/.freeze
 
   attr_accessor :type, :current_speed, :wagons
   attr_reader :number, :current_station
 
-  TRAIN_NUMBER_FORMAT = /^(\d{3}|\w{3})-*(\d{3}|\w{3})$/.freeze
+  validate :number, :presence
+  validate :number, :type, String
+  validate :number, :format, TRAIN_NUMBER_FORMAT
 
   def initialize(number, type)
     @number = number
     @type = type
     @wagons = []
     @current_speed = 0
-    validate!
     @@trains[number] = self
     register_instance
-  end
-
-  def valid?
-    validate!
-    true
-  rescue StandardError
-    false
   end
 
   def enum_wagons(&block)
@@ -94,13 +91,6 @@ class Train
 
   def self.find(number)
     @@trains[number]
-  end
-
-  protected
-
-  def validate!
-    raise 'Wrong type of train' unless type == :cargo || type == :passenger
-    raise 'Wrong number of train' if (number =~ TRAIN_NUMBER_FORMAT).nil?
   end
 
   private
